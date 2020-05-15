@@ -8,6 +8,7 @@ Homepage of Hackaroma: [here](https://www.aromajoin.com/hackaroma)
    - Official rules: [PDF](https://drive.google.com/file/d/1pwpCksr0kRWzzq3HsPF0bcMUr-uwWLaL/view)
    - Screening Round (5/13 ~ 5/28):
      - What is expected as an application? → [A short guide](https://paper.dropbox.com/doc/Perfecting-your-Hackaroma-Proposal--AzWa4BFYALfWgkcztSeRTRhaAQ-8VblQZyV0ehKdyAmCSeOV)
+     - How an application should look like? → [Sample](https://www.dropbox.com/s/9xcwgmslopemi94/200508_HackaromaProposalTemplate.pdf?dl=0)
    - Development Round (5/28 ~ 6/19):
      - Six finalists (individuals or teams) will develop their ideas. We will try our bests to ship the development kit, however you are expected to start development even before really handing in an Aroma Shooter.
      - Aroma Shooters are controlled through the internet using AWS IoT of which SDKs are available for iOS, Android, Java, Javascript, Python, C++ and more can be checked [here](https://docs.aws.amazon.com/iot/latest/developerguide/iot-sdks.html). More details comes below.

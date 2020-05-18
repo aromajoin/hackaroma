@@ -14,7 +14,6 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
      - アロマシューターはiOS, Android, Java, Javascript, Python, C++等環境でSDKが整っているAWS IoTを使ってインターネットを通して動かせます。もっと見たい人は [こちら](https://docs.aws.amazon.com/iot/latest/developerguide/iot-sdks.html)から見られます。詳しい説明は下に書きます。
      - 最終日6月19日（金）後で定める時間にオンライン発表会が行われます。開発に進む6チームは自分のアイデアや実現について発表してデモを行います。デモの時事前に登録されたアロマシューターを持っている人は全て同じ香りを体験できるようにします。それは**世界初香りデータのライブストリーミング**です。
      - 開発に進む6チームと遠隔にいる審査員はそれぞれアロマシューターを一台、アロマカートリッジを１セットを持ちます。全てのカートリッジセットは同じで、１セットにあるカートリッジ数は決まっていなんですが、6個以上です。
-2. どうやってインターネット上アロマシューターを制御できますか？ （随時追記します）
 3. アロマシューターを使った事例等
    - [香りを加えた VR](https://www.dropbox.com/s/9xse6isg22fhuw9/200109_VRHeroVideo.mp4?dl=0)
    - [香り Walkman](https://www.youtube.com/watch?v=r9MUcdwxsR4)
@@ -22,3 +21,76 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
    - [アロマサイネージ](https://aromajoin.com/solutions/aroma-signage)
    - [その他](https://aromajoin.com/solutions/arts-and-science)
 
+3. どうやってインターネット上アロマシューターを制御できますか？
+
+   ![Flow of controlling Aroma Shooter via Internet](MQTT4AS_JP.png)
+
+​                                                   *インターネット上アロマシューターを制御する流れ*
+
+(1) 事前登録アロマシューターシリアル番号リストはHackaromaチームからもらいます。
+
+(2) 貴方のシステムはそのリストを使って噴射する時リストに入っている全てのアロマシューターを動かします。開発されるシステムとアロマシューターの間に装置とインターネット上コミュニケートさせるMQTTプロトコルを使っているAWS IoT Brokerが入っています。
+
+(3) 下記は**Python**で書かれた例で、AWS IoT Python SDKを使いました。基本的に [AWS IoT Python SDK](https://github.com/aws/aws-iot-device-sdk-python)を参照しました。AWS IoTがサポートしている他のプラットフォームででも同様に動かせるはずです。
+
+- AWS IoT Python SDKレポジトリに書かれている最小限条件を自分の開発環境が満たしているかを確認してください。
+
+- AWSIoTPythonSDK パッケージをインストールします。
+
+- 下記のコードを実行してAWS IoT Brokerに接続します。
+
+  ```python
+  from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+  
+  # For certificate based connection
+  myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
+  
+  # For TLS mutual authentication
+  myMQTTClient.configureEndpoint(provided_endpoint, 8883)
+  
+  # configure credentials
+  # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
+  myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
+  
+  # infinite offline publish queueing
+  myMQTTClient.configureOfflinePublishQueueing(-1)
+  
+  # draining: 2Hz
+  myMQTTClient.configureDrainingFrequency(2)
+  
+  # 10 secs
+  myMQTTClient.configureConnectDisconnectTimeout(10)
+  
+  # 5 secs
+  myMQTTClient.configureMQTTOperationTimeout(5)
+  
+  # connect to the AWS IoT Broker
+  myMQTTClient.connect()
+  ```
+
+  
+
+- 上記ソースコードにあるfor *Your_client_name_could_be_whatever*を自分が選ぶ名前にしてください。下記の情報はHackaromaチームが提供します。
+
+  - *provided_endpoint*
+  - *PEM_file*
+  - *PEM_key_file*
+  - *certificate_file*
+
+- AWS IoT Brokerに接続できたら、下記のコードでインターネットを通してアロマシューターを噴射します。
+
+  ```python
+  topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
+  durationInMillis = 3000
+  channel = 3
+  intensity = 100
+  payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
+  myMQTTClient.publish(topic, payload, 0)
+  ```
+
+- 下記は引数で自分の用途と合わせて指定して使って下さい。
+
+  - *ASN2A00002*: ここには制御したいアロマシューターのシリアル番号を置き換えてください。
+  - *durationInMillis*: ミリ秒で表される噴射時間です。
+  - *channel*: 噴射したいアロマシューターのポート番号で、1～6です。
+  - *intensity*: 噴射強度で0～100です。100は一番強いという意味です。

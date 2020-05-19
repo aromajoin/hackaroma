@@ -24,7 +24,6 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
    - [Others](https://aromajoin.com/solutions/arts-and-science)
 
 3. How to control Aroma Shooters through the Internet?
-
 ![Flow of controlling Aroma Shooter via Internet](MQTT4AS.png)
 
 ​                                                   *Flow of controlling Aroma Shooter over the Internet*
@@ -96,5 +95,5 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
   - *durationInMillis*: the duration of diffusing in milliseconds.
   - *channel*: the port number in Aroma Shooter, should be from 1 to 6, from which you wan to diffuse.
   - *intensity*: should be from 0 to 100. This indicates how strong an Aroma Shooter will diffuse. *100* means the strongest level.
-  
+
 4. Coming soon: what type of scents will be available for the development round?

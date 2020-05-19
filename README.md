@@ -22,8 +22,27 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
    - [Productivity Booster](https://www.youtube.com/watch?v=p1f5A-vXAv8)
    - [Aroma Signage](https://aromajoin.com/solutions/aroma-signage)
    - [Others](https://aromajoin.com/solutions/arts-and-science)
+   
+3. What type of scents will be available for the development round?
 
-3. How to control Aroma Shooters through the Internet?
+After some intense deliberation, we have finally decided on which Aroma Cartridges all finalists will get to use to flesh out their projects. Each finalist will receive the following with their Aroma Shooter kit:
+
+   - Imitation Chanel #5
+   - Mango
+   - Coffee
+   - Lavender
+   - Forest
+   - Hinoki
+   - Spearmint
+   - お香 (Incense)
+   - Lemon
+   - Fresh Cut Grass
+   - Burnt Rubber
+   - Ocean
+
+There are 12 here, of which you may use 6 in one Aroma Shooter simultaneously. What do you think? Do these spark your creativity?
+
+4. How to control Aroma Shooters through the Internet?
 ![Flow of controlling Aroma Shooter via Internet](MQTT4AS.png)
 
 ​                                                   *Flow of controlling Aroma Shooter over the Internet*
@@ -95,5 +114,3 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
   - *durationInMillis*: the duration of diffusing in milliseconds.
   - *channel*: the port number in Aroma Shooter, should be from 1 to 6, from which you wan to diffuse.
   - *intensity*: should be from 0 to 100. This indicates how strong an Aroma Shooter will diffuse. *100* means the strongest level.
-
-4. Coming soon: what type of scents will be available for the development round?

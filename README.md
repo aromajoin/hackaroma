@@ -25,22 +25,22 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
    
 3. What type of scents will be available for the development round?
 
-After some intense deliberation, we have finally decided on which Aroma Cartridges all finalists will get to use to flesh out their projects. Each finalist will receive the following with their Aroma Shooter kit:
+   - After some intense deliberation, we have finally decided on which Aroma Cartridges all finalists will get to use to flesh out their projects. Each finalist will receive the following with their Aroma Shooter kit:
 
-   - Imitation Chanel #5
-   - Mango
-   - Coffee
-   - Lavender
-   - Forest
-   - Hinoki
-   - Spearmint
-   - お香 (Incense)
-   - Lemon
-   - Fresh Cut Grass
-   - Burnt Rubber
-   - Ocean
+     - Imitation Chanel #5
+     - Mango
+     - Coffee
+     - Lavender
+     - Forest
+     - Hinoki
+     - Spearmint
+     - お香 (Incense)
+     - Lemon
+     - Fresh Cut Grass
+     - Burnt Rubber
+     - Ocean
 
-There are 12 here, of which you may use 6 in one Aroma Shooter simultaneously. What do you think? Do these spark your creativity?
+   - There are 12 here, of which you may use 6 in one Aroma Shooter simultaneously. What do you think? Do these spark your creativity?
 
 4. How to control Aroma Shooters through the Internet?
 ![Flow of controlling Aroma Shooter via Internet](MQTT4AS.png)

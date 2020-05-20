@@ -118,5 +118,3 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
   - *durationInMillis*: ミリ秒で表される噴射時間です。
   - *channel*: 噴射したいアロマシューターのポート番号で、1～6です。
   - *intensity*: 噴射強度で0～100です。100は一番強いという意味です。
-  
-4. 追記予定：開発ラウンドでどんな香りが使えますか？

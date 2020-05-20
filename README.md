@@ -23,9 +23,9 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
    - [Aroma Signage](https://aromajoin.com/solutions/aroma-signage)
    - [Others](https://aromajoin.com/solutions/arts-and-science)
    
-3. What type of scents will be available for the development round?
+3. What types of scents will be available for the development round?
 
-   - After some intense deliberation, we have finally decided on which Aroma Cartridges all finalists will get to use to flesh out their projects. Each finalist will receive the following with their Aroma Shooter kit:
+   - Each finalist will receive the following with their Aroma Shooter kit:
 
      - Imitation Chanel #5
      - Mango
@@ -42,22 +42,25 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
    - There are 12 here, of which you may use 6 in one Aroma Shooter simultaneously. What do you think? Do these spark your creativity?
 
-4. How to control Aroma Shooters through the Internet?
+4. How do I communicate with other Aroma Shooters through the Internet?
+
+On the final day of Hackaroma, finalists will livestream a demo of their proof of concept. As part of this demo, finalists are expected to optimize their code such that all spectators with Aroma Shooters may experience their project's scents in realtime. Wow! If this seems a little tricky, we'll be happy to walk you through the process one-by-one.
+
 ![Flow of controlling Aroma Shooter via Internet](MQTT4AS.png)
 
-​                                                   *Flow of controlling Aroma Shooter over the Internet*
+​                                                   *Aroma Shooter Internet-based control flow*
 
 (1) You will get a registered list of Aroma Shooters from the Hackaroma team.
 
-(2) Your systems will use the list as input so that every time it diffuses, it will diffuse from all Aroma Shooters in the list. Between your systems and Aroma Shooters, there is an AWS IoT Broker which help you communicate with the devices over the Internet using MQTT protocol.
+(2) Your systems will use the list as input so that every time your device diffuses, it will send diffusion requests to all Aroma Shooters in the list. Between your code and the Aroma Shooters is an AWS IoT Broker which will help you communicate with the devices over the Internet. This broker uses an MQTT protocol.
 
-(3) Here under is an example written in **Python** using Python SDK of AWS IoT. Basically, this refers to [AWS IoT Python SDK](https://github.com/aws/aws-iot-device-sdk-python). The way it works should be similar in other platforms that AWS IoT supports.
+(3) Here is an example written in **Python** using the AWS IoT [Python SDK](https://github.com/aws/aws-iot-device-sdk-python). This process should be similar to other AWS IoT-supported platforms and languages. 
 
-- Check if your systems satisfy the minimum requirements listed in AWS IoT Python SDK repository.
+- Check if your systems satisfy the minimum requirements listed in the AWS IoT Python SDK repository.
 
-- Install AWSIoTPythonSDK package.
+- Install the AWSIoTPythonSDK package.
 
-- Adding and running the following code to connect to the AWS IoT Broker.
+- Add and run the following code to connect to the AWS IoT Broker.
 
   ```python
   from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
@@ -87,17 +90,16 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
   # connect to the AWS IoT Broker
   myMQTTClient.connect()
   ```
-
   
 
-- In the above source code, please specify freely a name for *Your_client_name_could_be_whatever*. And the following information will be provided by us:
+- In the above source code, please replace the placeholder *Your_client_name_could_be_whatever*. The following information will be provided by us:
 
   - *provided_endpoint*
   - *PEM_file*
   - *PEM_key_file*
   - *certificate_file*
 
-- Once you successfully connected to the broker, using the following sort of codes to diffuse scents from Aroma Shooter with specified serial numbers.
+- Once you successfully connect to the broker, trigger diffusions using code similar to the following (edit the ASN2 number for each Aroma Shooter on the list we provide):
 
   ```python
   topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
@@ -110,7 +112,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
 - The following items are parameters that you can change for your own purposes:
 
-  - *ASN2A00002*: this should be replaced by the serial number of the Aroma Shooter that you want to control.
-  - *durationInMillis*: the duration of diffusing in milliseconds.
-  - *channel*: the port number in Aroma Shooter, should be from 1 to 6, from which you wan to diffuse.
-  - *intensity*: should be from 0 to 100. This indicates how strong an Aroma Shooter will diffuse. *100* means the strongest level.
+  - *ASN2A00002*: this should be replaced by the serial number of the Aroma Shooter you want to control.
+  - *durationInMillis*: the duration of diffusion time in milliseconds.
+  - *channel*: the Aroma Shooter port number, from 1 to 6, corresponding to the scent you want to diffuse.
+  - *intensity*: ranges from 0 to 100. This indicates the strength an Aroma Shooter will diffuse. *100* represents the strongest level.

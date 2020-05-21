@@ -63,34 +63,34 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
 
 - 下記のコードを実行してAWS IoT Brokerに接続します。
 
-```python
-  from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-  
-  # For certificate based connection
-  myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
-  
-  # For TLS mutual authentication
-  myMQTTClient.configureEndpoint(provided_endpoint, 8883)
-  
-  # configure credentials
-  # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
-  myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
-  
-  # infinite offline publish queueing
-  myMQTTClient.configureOfflinePublishQueueing(-1)
-  
-  # draining: 2Hz
-  myMQTTClient.configureDrainingFrequency(2)
-  
-  # 10 secs
-  myMQTTClient.configureConnectDisconnectTimeout(10)
-  
-  # 5 secs
-  myMQTTClient.configureMQTTOperationTimeout(5)
-  
-  # connect to the AWS IoT Broker
-  myMQTTClient.connect()
-```
+  ```python
+    from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+
+    # For certificate based connection
+    myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
+
+    # For TLS mutual authentication
+    myMQTTClient.configureEndpoint(provided_endpoint, 8883)
+
+    # configure credentials
+    # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
+    myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
+
+    # infinite offline publish queueing
+    myMQTTClient.configureOfflinePublishQueueing(-1)
+
+    # draining: 2Hz
+    myMQTTClient.configureDrainingFrequency(2)
+
+    # 10 secs
+    myMQTTClient.configureConnectDisconnectTimeout(10)
+
+    # 5 secs
+    myMQTTClient.configureMQTTOperationTimeout(5)
+
+    # connect to the AWS IoT Broker
+    myMQTTClient.connect()
+  ```
 
 - 上記ソースコードにあるfor *Your_client_name_could_be_whatever*を自分が選ぶ名前にしてください。下記の情報はHackaromaチームが提供します。
 
@@ -102,12 +102,12 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
 - AWS IoT Brokerに接続できたら、下記のコードでインターネットを通してアロマシューターを噴射します。
 
   ```python
-  topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
-  durationInMillis = 3000
-  channel = 3
-  intensity = 100
-  payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
-  myMQTTClient.publish(topic, payload, 0)
+    topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
+    durationInMillis = 3000
+    channel = 3
+    intensity = 100
+    payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
+    myMQTTClient.publish(topic, payload, 0)
   ```
 
 - 下記は引数で自分の用途と合わせて指定して使って下さい。

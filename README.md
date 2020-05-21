@@ -63,34 +63,34 @@ On the final day of Hackaroma, finalists will livestream a demo of their proof o
 
 - Add and run the following code to connect to the AWS IoT Broker.
 
-```python
-  from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+  ```python
+    from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
-  # For certificate based connection
-  myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
+    # For certificate based connection
+    myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
 
-  # For TLS mutual authentication
-  myMQTTClient.configureEndpoint(provided_endpoint, 8883)
+    # For TLS mutual authentication
+    myMQTTClient.configureEndpoint(provided_endpoint, 8883)
 
-  # configure credentials
-  # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
-  myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
+    # configure credentials
+    # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
+    myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
 
-  # infinite offline publish queueing
-  myMQTTClient.configureOfflinePublishQueueing(-1)
+    # infinite offline publish queueing
+    myMQTTClient.configureOfflinePublishQueueing(-1)
 
-  # draining: 2Hz
-  myMQTTClient.configureDrainingFrequency(2)
+    # draining: 2Hz
+    myMQTTClient.configureDrainingFrequency(2)
 
-  # 10 secs
-  myMQTTClient.configureConnectDisconnectTimeout(10)
+    # 10 secs
+    myMQTTClient.configureConnectDisconnectTimeout(10)
 
-  # 5 secs
-  myMQTTClient.configureMQTTOperationTimeout(5)
+    # 5 secs
+    myMQTTClient.configureMQTTOperationTimeout(5)
 
-  # connect to the AWS IoT Broker
-  myMQTTClient.connect()
-```
+    # connect to the AWS IoT Broker
+    myMQTTClient.connect()
+  ```
 
 - In the above source code, please replace the placeholder *Your_client_name_could_be_whatever*. The following information will be provided by us:
 
@@ -102,12 +102,12 @@ On the final day of Hackaroma, finalists will livestream a demo of their proof o
 - Once you successfully connect to the broker, trigger diffusions using code similar to the following (edit the ASN2 number for each Aroma Shooter on the list we provide):
 
   ```python
-  topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
-  durationInMillis = 3000
-  channel = 3
-  intensity = 100
-  payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
-  myMQTTClient.publish(topic, payload, 0)
+    topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
+    durationInMillis = 3000
+    channel = 3
+    intensity = 100
+    payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
+    myMQTTClient.publish(topic, payload, 0)
   ```
 
 - The following items are parameters that you can change for your own purposes:

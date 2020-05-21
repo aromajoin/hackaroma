@@ -1,3 +1,7 @@
+---
+image: /assets/images/hackaroma-hero.jpg
+---
+
 [English](README.md) / [日本語](README-JP.md)
 # The world's first scent-inspired hackathon
 

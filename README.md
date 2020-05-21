@@ -1,5 +1,6 @@
-[English](README.md) / [日本語](README-JP.md)
 # The world's first scent-inspired hackathon
+
+[English](README.md) / [日本語](README-JP.md)
 
 Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
@@ -22,7 +23,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
    - [Productivity Booster](https://www.youtube.com/watch?v=p1f5A-vXAv8)
    - [Aroma Signage](https://aromajoin.com/solutions/aroma-signage)
    - [Others](https://aromajoin.com/solutions/arts-and-science)
-   
+
 3. What types of scents will be available for the development round?
 
    - Each finalist will receive the following with their Aroma Shooter kit:
@@ -46,7 +47,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
 On the final day of Hackaroma, finalists will livestream a demo of their proof of concept. As part of this demo, finalists are expected to optimize their code such that all spectators with Aroma Shooters may experience their project's scents in realtime. Wow! If this seems a little tricky, we'll be happy to walk you through the process one-by-one.
 
-![Flow of controlling Aroma Shooter via Internet](MQTT4AS.png)
+![Flow of controlling Aroma Shooter via Internet](/assets/images/MQTT4AS.png)
 
 ​                                                   *Aroma Shooter Internet-based control flow*
 
@@ -62,35 +63,34 @@ On the final day of Hackaroma, finalists will livestream a demo of their proof o
 
 - Add and run the following code to connect to the AWS IoT Broker.
 
-  ```python
+```python
   from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-  
+
   # For certificate based connection
   myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
-  
+
   # For TLS mutual authentication
   myMQTTClient.configureEndpoint(provided_endpoint, 8883)
-  
+
   # configure credentials
   # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
   myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
-  
+
   # infinite offline publish queueing
   myMQTTClient.configureOfflinePublishQueueing(-1)
-  
+
   # draining: 2Hz
   myMQTTClient.configureDrainingFrequency(2)
-  
+
   # 10 secs
   myMQTTClient.configureConnectDisconnectTimeout(10)
-  
+
   # 5 secs
   myMQTTClient.configureMQTTOperationTimeout(5)
-  
+
   # connect to the AWS IoT Broker
   myMQTTClient.connect()
-  ```
-  
+```
 
 - In the above source code, please replace the placeholder *Your_client_name_could_be_whatever*. The following information will be provided by us:
 

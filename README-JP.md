@@ -1,5 +1,6 @@
-[English](README.md) / [日本語](README-JP.md)
 # 世界初デジタル香りハッカソン
+
+[English](README.md) / [日本語](README-JP.md)
 
 Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
 
@@ -11,13 +12,13 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
      - 提案書ってどんなイメージ？→[サンプル](https://www.dropbox.com/s/scac6vm2f5fsuzf/200508_HackaromaProposalTemplateJP.pdf?dl=0)
    - 開発ラウンド（5月28日～6月19日）:
      - 開発に進む6チーム（個人可）は自分のアイデアを実現します。開発キットの発送には努めますが、開発キットが届く前から開発を進めるのが望ましいです。
-     
+
      - アロマシューターはiOS, Android, Java, Javascript, Python, C++等環境でSDKが整っているAWS IoTを使ってインターネットを通して動かせます。もっと見たい人は [こちら](https://docs.aws.amazon.com/iot/latest/developerguide/iot-sdks.html)から見られます。詳しい説明は下に書きます。
-     
+
      - 最終日6月19日（金）後で定める時間にオンライン発表会が行われます。開発に進む6チームは自分のアイデアや実現について発表してデモを行います。デモの時事前に登録されたアロマシューターを持っている人は全て同じ香りを体験できるようにします。それは**世界初香りデータのライブストリーミング**です。
-     
+
      - 開発に進む6チームと遠隔にいる審査員はそれぞれアロマシューターを一台、アロマカートリッジを１セットを持ちます。全てのカートリッジセットは同じで、１セットにあるカートリッジ数は決まっていなんですが、6個以上です。
-     
+
 2. アロマシューターを使った事例等
    - [香りを加えた VR](https://www.dropbox.com/s/9xse6isg22fhuw9/200109_VRHeroVideo.mp4?dl=0)
    - [香り Walkman](https://www.youtube.com/watch?v=r9MUcdwxsR4)
@@ -44,10 +45,9 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
 
    - 合計12個（種類）ありますが、同時に6種類までアロマシューターで使えます。どう思いますか？何かいいアイデアに繋がりそうですか？
 
-
 4. どうやってインターネット上アロマシューターを制御できますか？
 
-   ![インターネット上アロマシューターを制御する流れ](MQTT4AS_JP.png)
+   ![インターネット上アロマシューターを制御する流れ](/assets/images/MQTT4AS_JP.png)
 
 ​                                                   *インターネット上アロマシューターを制御する流れ*
 
@@ -64,35 +64,33 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
 - 下記のコードを実行してAWS IoT Brokerに接続します。
 
   ```python
-  from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-  
-  # For certificate based connection
-  myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
-  
-  # For TLS mutual authentication
-  myMQTTClient.configureEndpoint(provided_endpoint, 8883)
-  
-  # configure credentials
-  # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
-  myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
-  
-  # infinite offline publish queueing
-  myMQTTClient.configureOfflinePublishQueueing(-1)
-  
-  # draining: 2Hz
-  myMQTTClient.configureDrainingFrequency(2)
-  
-  # 10 secs
-  myMQTTClient.configureConnectDisconnectTimeout(10)
-  
-  # 5 secs
-  myMQTTClient.configureMQTTOperationTimeout(5)
-  
-  # connect to the AWS IoT Broker
-  myMQTTClient.connect()
-  ```
+    from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
-  
+    # For certificate based connection
+    myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
+
+    # For TLS mutual authentication
+    myMQTTClient.configureEndpoint(provided_endpoint, 8883)
+
+    # configure credentials
+    # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
+    myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
+
+    # infinite offline publish queueing
+    myMQTTClient.configureOfflinePublishQueueing(-1)
+
+    # draining: 2Hz
+    myMQTTClient.configureDrainingFrequency(2)
+
+    # 10 secs
+    myMQTTClient.configureConnectDisconnectTimeout(10)
+
+    # 5 secs
+    myMQTTClient.configureMQTTOperationTimeout(5)
+
+    # connect to the AWS IoT Broker
+    myMQTTClient.connect()
+  ```
 
 - 上記ソースコードにあるfor *Your_client_name_could_be_whatever*を自分が選ぶ名前にしてください。下記の情報はHackaromaチームが提供します。
 
@@ -104,12 +102,12 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
 - AWS IoT Brokerに接続できたら、下記のコードでインターネットを通してアロマシューターを噴射します。
 
   ```python
-  topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
-  durationInMillis = 3000
-  channel = 3
-  intensity = 100
-  payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
-  myMQTTClient.publish(topic, payload, 0)
+    topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
+    durationInMillis = 3000
+    channel = 3
+    intensity = 100
+    payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
+    myMQTTClient.publish(topic, payload, 0)
   ```
 
 - 下記は引数で自分の用途と合わせて指定して使って下さい。

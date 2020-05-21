@@ -40,8 +40,9 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
      - Fresh Cut Grass
      - Burnt Rubber
      - Ocean
+     - Caramel
 
-   - There are 12 here, of which you may use 6 in one Aroma Shooter simultaneously. What do you think? Do these spark your creativity?
+   - There are 13 (we have recently decided to add Caramel to the list) here, of which you may use 6 in one Aroma Shooter simultaneously. What do you think? Do these spark your creativity?
 
 4. How do I communicate with other Aroma Shooters through the Internet?
 

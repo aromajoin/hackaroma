@@ -11,7 +11,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
      - Proposal guidelines, suggestions, things to know → [A short guide](https://paper.dropbox.com/doc/Perfecting-your-Hackaroma-Proposal--AzWa4BFYALfWgkcztSeRTRhaAQ-8VblQZyV0ehKdyAmCSeOV)
      - [Sample Proposal](https://www.dropbox.com/s/9xcwgmslopemi94/200508_HackaromaProposalTemplate.pdf?dl=0)
    - Development Round (5/28 ~ 6/19):
-     - Six finalists (individuals or teams) will develop their ideas. We will do what we can to get an Aroma Shooter dev kit to you quickly, however finalists may start development with or without a device. Dev kits will include a set of cartridges. The plan is to send the same set of cartridgs to all finalists. The number of cartridges in each set is still to be determined, though there will be at least six.
+     - Six finalists (individuals or teams) will develop their ideas. We will do what we can to get an Aroma Shooter dev kit to you quickly, however finalists may start development with or without a device. Dev kits will include a set of cartridges. The plan is to send the same set of cartridges to all finalists, the list of which you'll find below.
 
      - On the final day, June 19th (Friday) JST, at a TBD time, we will host an online pitch event where finalists demo their projects such that pre-selected audiencemembers with Aroma Shooters will be able to smell the scents in the demo simultaneously. This may in fact be **the world's first scent data livestreaming**.
 

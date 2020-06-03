@@ -13,7 +13,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
    - Development Round (5/28 ~ 6/19):
      - Six finalists (individuals or teams) will develop their ideas. We will do what we can to get an Aroma Shooter dev kit to you quickly, however finalists may start development with or without a device. Dev kits will include a set of cartridges. The plan is to send the same set of cartridges to all finalists, the list of which you'll find below.
 
-     - On the final day, June 19th (Friday) JST, at a TBD time, we will host an online pitch event where finalists demo their projects such that pre-selected audiencemembers with Aroma Shooters will be able to smell the scents in the demo simultaneously. This may in fact be **the world's first scent data livestreaming**.
+     - On the final day, June 19th (Friday) JST, at a TBD time, we will host an online pitch event where finalists demo their projects such that pre-selected audience members with Aroma Shooters will be able to smell the scents in the demo simultaneously. This may in fact be **the world's first scent data livestreaming**.
 
      - Aroma Shooters are controlled through the Internet using AWS IoT, of which SDKs are available for iOS, Android, Java, Javascript, Python, C++, and more. Learn more [here](https://docs.aws.amazon.com/iot/latest/developerguide/iot-sdks.html). More details and guides specific to the Aroma Shooter coming soon.
 
@@ -44,76 +44,104 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
    - There are 13 (we have recently decided to add Caramel to the list) here, of which you may use 6 in one Aroma Shooter simultaneously. What do you think? Do these spark your creativity?
 
-4. How do I communicate with other Aroma Shooters through the Internet?
+4. How do I communicate with other Aroma Shooters through the Internet? ([Old setup](/assets/files/old_AromaShooterControlGuide.md))
 
-On the final day of Hackaroma, finalists will livestream a demo of their proof of concept. As part of this demo, finalists are expected to optimize their code such that all spectators with Aroma Shooters may experience their project's scents in realtime. Wow! If this seems a little tricky, we'll be happy to walk you through the process one-by-one.
+- HTTP-based Aroma Shooter control flow.
 
-![Flow of controlling Aroma Shooter via Internet](/assets/images/MQTT4AS.png)
+- ![Flow of controlling Aroma Shooter via Internet](/assets/images/HTTP4AS.png)
 
-​                                                   *Aroma Shooter Internet-based control flow*
+- Steps
 
-(1) You will get a registered list of Aroma Shooters from the Hackaroma team.
+  - Connect your Aroma Shooter to a local network which is connected with the internet. If you don't know how, please refer to [this document](https://github.com/aromajoin/controller-http-api).
+  - Send HTTP request to control.　※ *The device will automatically disconnect after roughly 1 hour without any receiving request. If it happens, please plug the device out from the power source and then plug it in again.*
 
-(2) Your systems will use the list as input so that every time your device diffuses, it will send diffusion requests to all Aroma Shooters in the list. Between your code and the Aroma Shooters is an AWS IoT Broker which will help you communicate with the devices over the Internet. This broker uses an MQTT protocol.
+- Unicast vs. Multicast
 
-(3) Here is an example written in **Python** using the AWS IoT [Python SDK](https://github.com/aws/aws-iot-device-sdk-python). This process should be similar to other AWS IoT-supported platforms and languages. 
+  - By specifying the type of casting as unicast, you control **only** your device.
+  - By specifying the type of casting as broadcast, you control all devices in a pre-registered list (including your own device). 
+  - During the **development** time, both unicast and broadcast control only the device you are keeping.
+  - There is a **rehearsal** time (we will meet with each finalist separately), when broadcast controls a set of testing device.
+  - On the day of the final pitch, broadcast controls all registered devices, including yours, ours, judges' and probably others'. So on the day of final pitch, **except for demo, please DO NOT use broadcast**.
 
-- Check if your systems satisfy the minimum requirements listed in the AWS IoT Python SDK repository.
+- Which credentials are required?
 
-- Install the AWSIoTPythonSDK package.
+  - API Key: this will be mailed to each of you.
+  - Private Key: this will be mailed to each of you. Each finalist has a distinct key.
 
-- Add and run the following code to connect to the AWS IoT Broker.
+- What is the design of the HTTP API?
 
-  ```python
-    from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+  - URL: https://lvxcf3yn35.execute-api.us-west-2.amazonaws.com/prod/as2/control
 
-    # For certificate based connection
-    myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
+  - Type of request: POST
 
-    # For TLS mutual authentication
-    myMQTTClient.configureEndpoint(provided_endpoint, 8883)
+  - Header must include the API Key.
 
-    # configure credentials
-    # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
-    myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
+  - Attachment: JSON data, which includes the following fields
 
-    # infinite offline publish queueing
-    myMQTTClient.configureOfflinePublishQueueing(-1)
+    - For diffusion:
 
-    # draining: 2Hz
-    myMQTTClient.configureDrainingFrequency(2)
+      - ```json
+        {
+            "private_key":"your_private_key_that_we_provide",
+            "casting":"unicast/broadcast",
+            "type":"diffuse",
+            "duration":"time_to_diffuse_in_milisecond",
+            "booster":"true/false", // to toggle on and off the non scent channel,
+            "channel":"1~6",
+            "intensity":"0-100"
+        }
+        ```
 
-    # 10 secs
-    myMQTTClient.configureConnectDisconnectTimeout(10)
+      - Example:
 
-    # 5 secs
-    myMQTTClient.configureMQTTOperationTimeout(5)
+      - ```json
+        {
+            "private_key":"place_holder",
+            "casting":"unicast",
+            "type":"diffuse",
+            "duration":"3000",
+            "booster":"true",
+            "channel":"1",
+            "intensity":"100"
+        }
+        ```
 
-    # connect to the AWS IoT Broker
-    myMQTTClient.connect()
-  ```
+        
 
-- In the above source code, please replace the placeholder *Your_client_name_could_be_whatever*. The following information will be provided by us:
+    - For stopping diffusion:
 
-  - *provided_endpoint*
-  - *PEM_file*
-  - *PEM_key_file*
-  - *certificate_file*
+      ```json
+      {
+          "private_key":"your_private_key_that_we_provide",
+          "casting": "unicast/broadcast",
+          "type": "stop",
+          "channel": "1~6"
+      }
+      ```
 
-- Once you successfully connect to the broker, trigger diffusions using code similar to the following (edit the ASN2 number for each Aroma Shooter on the list we provide):
+    - Example:
 
-  ```python
-    topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
-    durationInMillis = 3000
-    channel = 3
-    intensity = 100
-    payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
-    myMQTTClient.publish(topic, payload, 0)
-  ```
+    - ```json
+      {
+          "private_key":"place_holder",
+          "casting":"broadcast",
+          "type":"stop",
+          "channel":"1"
+      }
+      ```
 
-- The following items are parameters that you can change for your own purposes:
+      
 
-  - *ASN2A00002*: this should be replaced by the serial number of the Aroma Shooter you want to control.
-  - *durationInMillis*: the duration of diffusion time in milliseconds.
-  - *channel*: the Aroma Shooter port number, from 1 to 6, corresponding to the scent you want to diffuse.
-  - *intensity*: ranges from 0 to 100. This indicates the strength an Aroma Shooter will diffuse. *100* represents the strongest level.
+- How can use try sending HTTP request?
+
+  - Highly recommend using Postman
+  - ![Postman url and header set up](/assets/images/postman_header.png)
+  - ![postman http data set up](/assets/images/postman_data.png)
+
+- How many times can I send requests per day?
+
+  - This API server is running on AWS Serverless framework, which is a paid service. We prepared it for maximum roughly 5000 requests/day.
+  - This is the total number of requests this server can receive per one day. So if you find this problem, please try to wait until the following day when counting starts over.
+  - Roughly, each of you has more than 800 requests/day. Please keep this in mind.
+
+- Finally, should you have any technical question, please feel free to let us know via hackaroma@aromajoin.com.

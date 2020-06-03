@@ -48,7 +48,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
 - HTTP-based Aroma Shooter control flow.
 
-- ![Flow of controlling Aroma Shooter via Internet](/assets/images/HTTP4AS.png)
+ ![Flow of controlling Aroma Shooter via Internet](/assets/images/HTTP4AS.png)
 
 - Steps
 
@@ -80,7 +80,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
     - For diffusion:
 
-      - ```json
+      ```json
         {
             "private_key":"your_private_key_that_we_provide",
             "casting":"unicast/broadcast",
@@ -91,10 +91,9 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
             "intensity":"0-100"
         }
         ```
+    - Example:
 
-      - Example:
-
-      - ```json
+      ```json
         {
             "private_key":"place_holder",
             "casting":"unicast",
@@ -121,7 +120,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
     - Example:
 
-    - ```json
+      ```json
       {
           "private_key":"place_holder",
           "casting":"broadcast",
@@ -132,11 +131,13 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
       
 
-- How can use try sending HTTP request?
+- How can you test sending HTTP request?
 
   - Highly recommend using Postman
-  - ![Postman url and header set up](/assets/images/postman_header.png)
-  - ![postman http data set up](/assets/images/postman_data.png)
+   ![Postman url and header set up](/assets/images/postman_header.png)
+   (Set up URL and header)
+   ![postman http data set up](/assets/images/postman_data.png)
+   (Set up JSON data)
 
 - How many times can I send requests per day?
 

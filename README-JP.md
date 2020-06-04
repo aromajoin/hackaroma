@@ -46,74 +46,107 @@ Hackaromaのメインページ: [こちら](https://www.aromajoin.com/hackaroma)
 
    - 合計13種類（キャラメルを追加することになりました）ありますが、同時に6種類までアロマシューターで使えます。どう思いますか？何かいいアイデアに繋がりそうですか？
 
-4. どうやってインターネット上アロマシューターを制御できますか？
+4. どうやってインターネット上アロマシューターを制御することができますか？ ([古くなった設定](/assets/files/old_AromaShooterControlGuide-JP.md))
 
-   ![インターネット上アロマシューターを制御する流れ](/assets/images/MQTT4AS_JP.png)
-
-​                                                   *インターネット上アロマシューターを制御する流れ*
-
-(1) 事前登録アロマシューターシリアル番号リストはHackaromaチームからもらいます。
-
-(2) 貴方のシステムはそのリストを使って噴射する時リストに入っている全てのアロマシューターを動かします。開発されるシステムとアロマシューターの間に装置とインターネット上コミュニケートさせるMQTTプロトコルを使っているAWS IoT Brokerが入っています。
-
-(3) 下記は**Python**で書かれた例で、AWS IoT Python SDKを使いました。基本的に [AWS IoT Python SDK](https://github.com/aws/aws-iot-device-sdk-python)を参照しました。AWS IoTがサポートしている他のプラットフォームででも同様に動かせるはずです。
-
-- AWS IoT Python SDKレポジトリに書かれている最小限条件を自分の開発環境が満たしているかを確認してください。
-
-- AWSIoTPythonSDK パッケージをインストールします。
-
-- 下記のコードを実行してAWS IoT Brokerに接続します。
-
-  ```python
-    from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-
-    # For certificate based connection
-    myMQTTClient = AWSIoTMQTTClient(Your_client_name_could_be_whatever)
-
-    # For TLS mutual authentication
-    myMQTTClient.configureEndpoint(provided_endpoint, 8883)
-
-    # configure credentials
-    # myMQTTClient.configureCredentials("YOUR/ROOT/CA/PATH", "PRIVATE/KEY/PATH", "CERTIFICATE/PATH")
-    myMQTTClient.configureCredentials(PEM_file, PEM_key_file, certificate_file)
-
-    # infinite offline publish queueing
-    myMQTTClient.configureOfflinePublishQueueing(-1)
-
-    # draining: 2Hz
-    myMQTTClient.configureDrainingFrequency(2)
-
-    # 10 secs
-    myMQTTClient.configureConnectDisconnectTimeout(10)
-
-    # 5 secs
-    myMQTTClient.configureMQTTOperationTimeout(5)
-
-    # connect to the AWS IoT Broker
-    myMQTTClient.connect()
-  ```
-
-- 上記ソースコードにあるfor *Your_client_name_could_be_whatever*を自分が選ぶ名前にしてください。下記の情報はHackaromaチームが提供します。
-
-  - *provided_endpoint*
-  - *PEM_file*
-  - *PEM_key_file*
-  - *certificate_file*
-
-- AWS IoT Brokerに接続できたら、下記のコードでインターネットを通してアロマシューターを噴射します。
-
-  ```python
-    topic = "aromajoin/aromashooter/ASN2A00002/command/diffuse"
-    durationInMillis = 3000
-    channel = 3
-    intensity = 100
-    payload = "{ \"duration\": " + str(durationInMillis) + ", \"channel\": " + str(channel) + ", \"intensity\": " + str(intensity) + ", \"booster\": false}"
-    myMQTTClient.publish(topic, payload, 0)
-  ```
-
-- 下記は引数で自分の用途と合わせて指定して使って下さい。
-
-  - *ASN2A00002*: ここには制御したいアロマシューターのシリアル番号を置き換えてください。
-  - *durationInMillis*: ミリ秒で表される噴射時間です。
-  - *channel*: 噴射したいアロマシューターのポート番号で、1～6です。
-  - *intensity*: 噴射強度で0～100です。100は一番強いという意味です。
+   - HTTPを基づいたアロマシューター制御フロー。
+   
+    ![Flow of controlling Aroma Shooter via Internet](/assets/images/HTTP4AS-JP.png)
+   
+   - 手順
+   
+     - 最初はアロマシューターをインターネットが繋がるローカルネットワークに繋げます。やり方が分からない場合は[こちら](https://github.com/aromajoin/controller-http-api)を参照してください。
+     - HTTPリクエストを送信してアロマシューターを制御します。※ *アロマシューターは何も制御されずに1時間程度たってから自動的に切断します。その場合、電源を外してからもう一度差し込んだら再起動して接続できます。*
+   
+   - ユニキャスト対ブロードキャスト
+   
+     - キャスティングタイプをユニキャストにしたら、ファイナリストの方々は自分の持っているアロマシューター**だけ**制御できます。
+     - キャスティングタイプをブロードキャストにした場合、ファイナリストの方々は自分が持っているアロマシューターを含めて事前に登録された全てのアロマシューターを制御できます。
+     - **開発期間中**はユニキャストともブロードキャストともファイナリストの方々の持っているアロマシューターだけ制御できます。
+     - ファイナリストの方々にそれぞれ**リハーサル**時間を設けて、あそこでブロードキャストは用意しているテスティングデバイスの全てとそのファイナリストが持っているアロマシューターを制御できます。
+     - 最終発表時ではブロードキャストは全てのデバイスを制御するので、**当日はデモ以外の目的でブロードキャストをめったに使わないでください。**
+   
+   - どんなキーが必要ですか？
+   
+     - API Key: メールで共有させて頂きます。
+     - Private Key: メールで共有させて頂きます。ファイナリストの方々はそれぞれ別のキーを用意しています。
+   
+   - HTTP APIはどんなものですか?
+   
+     - **要注意!**: アロマシューターはあるポートから連続で10秒以上噴射したら壊れる場合があります。例えば、ポート3から15秒噴射したい場合、5秒噴射、5秒休憩、5秒噴射という形はお勧めします。
+   
+     - URL: https://lvxcf3yn35.execute-api.us-west-2.amazonaws.com/prod/as2/control
+   
+     - リクエストの種類: POST
+   
+     - API Keyはヘーダに入れ込む必要があります。
+   
+     - 送信データー: 下記形式のJSONデーターです。
+   
+       - 噴射する：
+   
+         ```json
+           {
+               "private_key":"your_private_key_that_we_provide",
+               "casting":"unicast/broadcast",
+               "type":"diffuse",
+               "duration":"time_to_diffuse_in_milisecond",
+               "booster":"true/false", // 無臭ポートを噴射するかしないかの設定
+               "channel":"1~6",
+               "intensity":"0-100"
+           }
+         ```
+       - 例:
+   
+         ```json
+           {
+               "private_key":"place_holder",
+               "casting":"unicast",
+               "type":"diffuse",
+               "duration":"3000",
+               "booster":"true",
+               "channel":"1",
+               "intensity":"100"
+           }
+         ```
+   
+           
+   
+       - 噴射停止:
+   
+         ```json
+         {
+             "private_key":"your_private_key_that_we_provide",
+             "casting": "unicast/broadcast",
+             "type": "stop",
+             "channel": "1~6"
+         }
+         ```
+   
+       - 例:
+   
+         ```json
+         {
+             "private_key":"place_holder",
+             "casting":"broadcast",
+             "type":"stop",
+             "channel":"1"
+         }
+         ```
+   
+         
+   
+   - どうやってHTTP リクエストを試せますか?
+   
+     - お勧めは Postmanです。
+      ![Postman url and header set up](/assets/images/postman_header.png)
+      (URLとヘーダ設定)
+      ![postman http data set up](/assets/images/postman_data.png)
+      (JSON データ設定)
+   
+   - 一日何回までリクエストを送れますか?
+   
+     - 本APIサーバーは有料サービスであるAWS Serverless frameworkを使っています。一日全部で5000リクエスト程度受付できます。
+     - その数を超えた場合、一時的サーバーを使えません。日変わったらまた使えるようになります。
+     - おおよそファイナリストの方々はそれぞれ一日800回程度使えます。覚えておいてください。
+   
+   - 最後に、何か質問があったら、お気軽に hackaroma@aromajoin.comまで連絡してください。

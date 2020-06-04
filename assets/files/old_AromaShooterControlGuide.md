@@ -2,7 +2,7 @@
 
 On the final day of Hackaroma, finalists will livestream a demo of their proof of concept. As part of this demo, finalists are expected to optimize their code such that all spectators with Aroma Shooters may experience their project's scents in realtime. Wow! If this seems a little tricky, we'll be happy to walk you through the process one-by-one.
 
-![Flow of controlling Aroma Shooter via Internet](/assets/images/MQTT4AS.png)
+![Flow of controlling Aroma Shooter via Internet](../images/MQTT4AS.png)
 
 ​                                                   *Aroma Shooter Internet-based control flow*
 

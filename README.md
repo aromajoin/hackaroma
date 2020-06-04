@@ -55,7 +55,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
   - Connect your Aroma Shooter to a local network which is connected with the internet. If you don't know how, please refer to [this document](https://github.com/aromajoin/controller-http-api).
   - Send HTTP request to control.　※ *The device will automatically disconnect after roughly 1 hour without any receiving request. If it happens, please plug the device out from the power source and then plug it in again.*
 
-- Unicast vs. Multicast
+- Unicast vs. Broadcast
 
   - By specifying the type of casting as unicast, you control **only** your device.
   - By specifying the type of casting as broadcast, you control all devices in a pre-registered list (including your own device). 

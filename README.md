@@ -70,6 +70,8 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
 - What is the design of the HTTP API?
 
+  - **Warning!**: A continuous diffusing of more than 10 secs. from one channel might break Aroma Shooters. For example if you want to diffuse in 15 seconds from channel 3, then a structure like: diffuse 5 seconds, stop 5 seconds, and diffuse 5 seconds, is recommended.
+
   - URL: https://lvxcf3yn35.execute-api.us-west-2.amazonaws.com/prod/as2/control
 
   - Type of request: POST

@@ -52,16 +52,16 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
 - Steps
 
-  - Connect your Aroma Shooter to a local network which is connected with the internet. If you don't know how, please refer to [this document](https://github.com/aromajoin/controller-http-api).
+  - Connect your Aroma Shooter to a local network which is connected with the Internet. If you don't know how, please refer to [this document](https://github.com/aromajoin/controller-http-api).
   - Send HTTP request to control.　※ *The device will automatically disconnect after roughly 1 hour without any receiving request. If it happens, please plug the device out from the power source and then plug it in again.*
 
 - Unicast vs. Broadcast
 
-  - By specifying the type of casting as unicast, you control **only** your device.
-  - By specifying the type of casting as broadcast, you control all devices in a pre-registered list (including your own device). 
-  - During the **development** time, both unicast and broadcast control only the device you are keeping.
-  - There is a **rehearsal** time (we will meet with each finalist separately), when broadcast controls a set of testing device.
-  - On the day of the final pitch, broadcast controls all registered devices, including yours, ours, judges' and probably others'. So on the day of final pitch, **except for demo, please DO NOT use broadcast**.
+  - Unicast is a casting type by which you control **only** your device.
+  - Broadcast is a casting type by which you control all devices in a pre-registered list (including your own).
+  - During the **development** period, both unicast and broadcast casting types will only control your device.
+  - There is a **rehearsal** time (we will meet with each finalist individually), where broadcasting will control a set of testing devices at our office.
+  - On the day of the final pitch, broadcasting will control all registered devices, including yours, ours, judges' and probably others'. So on the day of the final pitch, **please DO NOT broadcast unless it is your turn to demo**.
 
 - Which credentials are required?
 
@@ -70,7 +70,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
 - What is the design of the HTTP API?
 
-  - **Warning!**: A continuous diffusing of more than 10 secs. from one channel might break Aroma Shooters. For example if you want to diffuse in 15 seconds from channel 3, then a structure like: diffuse 5 seconds, stop 5 seconds, and diffuse 5 seconds, is recommended.
+  - **Warning!**: Continuously diffusing for more than 10 seconds from one channel might damage your Aroma Shooter. If you want to diffuse for 15 seconds from channel 3, it is recommended that you diffuse for 5 seconds, pause for 5 seconds, then diffuse again for 5 seconds. For these purposes, the 'booster' is considered its own channel. More info on that below.
 
   - URL: https://lvxcf3yn35.execute-api.us-west-2.amazonaws.com/prod/as2/control
 
@@ -80,43 +80,43 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
   - Attachment: JSON data, which includes the following fields
 
-    - For diffusion:
+    - To diffuse:
 
       ```json
         {
             "private_key":"your_private_key_that_we_provide",
-            "casting":"unicast/broadcast",
-            "type":"diffuse",
-            "duration":"time_to_diffuse_in_milisecond",
-            "booster":"true/false", // to toggle on and off the non scent channel,
-            "channel":"1~6",
-            "intensity":"0-100"
+            "casting":"unicast/broadcast", // choose between unicast or broadcast
+            "type":"diffuse", // leave this alone
+            "duration":"time_to_diffuse_in_milliseconds", // make sure this is less than 10000
+            "booster":"true/false", // "true" will activate the Aroma Shooter's extra fan, which pushes scents slightly farther
+            "channel":"1~6", // corresponds to the channel number of the cartridge you want to activate
+            "intensity":"0-100" // choose any integer between 0 and 100. 100 is full intensity, 0 will not diffuse
         }
         ```
     - Example:
 
       ```json
         {
-            "private_key":"place_holder",
+            "private_key":"qaLUDC7w", // use your own private key
             "casting":"unicast",
             "type":"diffuse",
             "duration":"3000",
             "booster":"true",
             "channel":"1",
-            "intensity":"100"
+            "intensity":"75"
         }
         ```
 
         
 
-    - For stopping diffusion:
+    - To halt diffusion of a specific cartridge:
 
       ```json
       {
           "private_key":"your_private_key_that_we_provide",
-          "casting": "unicast/broadcast",
-          "type": "stop",
-          "channel": "1~6"
+          "casting":"unicast/broadcast", // choose between unicast or broadcast
+          "type": "stop", // leave this alone
+          "channel":"1~6", // corresponds to the channel number of the cartridge you want to stop
       }
       ```
 
@@ -124,7 +124,7 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
       ```json
       {
-          "private_key":"place_holder",
+          "private_key":"qaLUDC7w", // use your own private key
           "casting":"broadcast",
           "type":"stop",
           "channel":"1"
@@ -133,9 +133,9 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
       
 
-- How can you test sending HTTP request?
+- How can I test sending HTTP requests?
 
-  - Highly recommend using Postman
+  - We highly recommend using Postman
    ![Postman url and header set up](/assets/images/postman_header.png)
    (Set up URL and header)
    ![postman http data set up](/assets/images/postman_data.png)
@@ -143,8 +143,8 @@ Hackaroma [Official Site](https://www.aromajoin.com/hackaroma)
 
 - How many times can I send requests per day?
 
-  - This API server is running on AWS Serverless framework, which is a paid service. We prepared it for maximum roughly 5000 requests/day.
-  - This is the total number of requests this server can receive per one day. So if you find this problem, please try to wait until the following day when counting starts over.
-  - Roughly, each of you has more than 800 requests/day. Please keep this in mind.
+  - This API server is running on AWS Serverless framework, which is a paid service. We prepared it for roughly up to 5000 requests per day.
+  - This is the total number of requests this server can receive per day. If you find this too restrictive, ask us about using our local HTTP API on days where you expect to make an excessive number of requests, and please try to wait until the following day when the limit refreshes.
+  - Roughly, each finalist has more than 800 requests/day. Please be mindful.
 
-- Finally, should you have any technical question, please feel free to let us know via hackaroma@aromajoin.com.
+- Finally, should you have any technical questions, feel free to reach out via hackaroma@aromajoin.com.
